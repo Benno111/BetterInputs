@@ -1,11 +1,11 @@
 {
-    "geode": "4.2.0",
+    "geode": "5.11.1",
     "gd": {
-        "win": "2.2074",
-        "mac": "2.2074"
+        "win": "2.2081",
+        "mac": "2.2081"
     },
     "version": "v4.2.0-beta.20",
-    "id": "spaghettdev.betterinputs",
+    "id": "spaghettdev.betterinputs.dev",
     "name": "BetterInputs",
     "developer": "SpaghettDev",
     "description": "Makes inputs behave like they should.",
