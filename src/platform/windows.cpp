@@ -20,7 +20,7 @@ namespace
 
 	bool hasModifier(KeyboardInputData const& data, uint8_t modifier)
 	{
-		return (data.modifiers & modifier) != 0;
+		return static_cast<bool>(data.modifiers & modifier);
 	}
 
 	ListenerResult handleKeyboardInput(KeyboardInputData& data)
