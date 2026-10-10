@@ -175,7 +175,7 @@ void BetterTextInputNode::updateCursorPos(std::size_t pos)
 
 	int cursorPos = m_fields->m_pos == -1 ? m_fields->m_string.length() : m_fields->m_pos;
 
-	if (auto placeholderLabel = static_cast<CCLabelBMFontPlus*>(this->m_placeholderLabel))
+	if (auto placeholderLabel = static_cast<CCLabelBMFontPlus*>(this->m_textLabel))
 	{
 		if (m_fields->m_string.empty())
 			return this->m_cursor->setPosition({ 2.f, -1.f });
@@ -374,7 +374,7 @@ void BetterTextInputNode::onUpArrowKey(bool isShift)
 {
 	if (m_fields->m_string.empty()) return;
 
-	if (this->m_placeholderLabel)
+	if (this->m_textLabel)
 	{
 		std::size_t fromPos;
 
@@ -423,7 +423,7 @@ void BetterTextInputNode::onDownArrowKey(bool isShift)
 {
 	if (m_fields->m_string.empty()) return;
 
-	if (this->m_placeholderLabel)
+	if (this->m_textLabel)
 	{
 		std::size_t fromPos;
 
@@ -636,8 +636,8 @@ void BetterTextInputNode::onStringEmpty()
 	else
 		newString = m_fields->m_placeholder_str;
 
-	if (this->m_placeholderLabel)
-		this->m_placeholderLabel->setString(newString.c_str());
+	if (this->m_textLabel)
+		this->m_textLabel->setString(newString.c_str());
 	else
 		this->m_textArea->setString(newString.c_str());
 	updateBlinkLabelToCharForced(-1);
@@ -654,8 +654,8 @@ void BetterTextInputNode::useUpdateBlinkPos(bool toggle)
 
 void BetterTextInputNode::showTextOrPlaceholder(bool toggle)
 {
-	if (this->m_placeholderLabel)
-		this->m_placeholderLabel->setVisible(toggle);
+	if (this->m_textLabel)
+		this->m_textLabel->setVisible(toggle);
 	else
 		this->m_textArea->setVisible(toggle);
 }
@@ -686,7 +686,7 @@ void BetterTextInputNode::highlightFromToPos(int from, int to)
 	auto highlightColor = getHighlightColor();
 	m_fields->m_highlighted.update(m_fields->m_string, { from, to });
 
-	if (auto label = static_cast<CCLabelBMFontPlus*>(this->m_placeholderLabel))
+	if (auto label = static_cast<CCLabelBMFontPlus*>(this->m_textLabel))
 	{
 		auto highlight = m_fields->m_highlights[0];
 		auto fromCharInfo = getCharNodePosInfo(from, true);
@@ -939,7 +939,7 @@ CharNodeInfo BetterTextInputNode::getCharNodePosInfo(std::size_t pos, bool isLef
 {
 	std::size_t cursorPos = pos == -1 ? m_fields->m_string.length() - 1 : pos;
 
-	if (auto label = static_cast<CCLabelBMFontPlus*>(this->m_placeholderLabel))
+	if (auto label = static_cast<CCLabelBMFontPlus*>(this->m_textLabel))
 	{
 		auto charNode = static_cast<CCFontSprite*>(
 			label->getChildren()->objectAtIndex(cursorPos)
@@ -1076,9 +1076,9 @@ InputNodeTextAreaInfo BetterTextInputNode::getTextLabelInfoFromPos(std::size_t p
 	if (pos == -1)
 		pos = m_fields->m_string.length() - 1;
 
-	if (this->m_placeholderLabel)
+	if (this->m_textLabel)
 		return {
-			this->m_placeholderLabel,
+			this->m_textLabel,
 			0,
 			pos,
 			pos
@@ -1119,11 +1119,11 @@ std::size_t BetterTextInputNode::getClosestCharIdxToXPos(float posX)
 	float minDist = std::numeric_limits<float>::max();
 	std::size_t closestIdx = -2;
 	std::size_t absolutePos = 0;
-	float localPosX = this->m_placeholderLabel->convertToNodeSpace(
+	float localPosX = this->m_textLabel->convertToNodeSpace(
 		this->convertToWorldSpace({ posX, .0f })
 	).x;
 
-	for (std::size_t idx = 0; auto* character : CCArrayExt<CCFontSprite>(this->m_placeholderLabel->getChildren()))
+	for (std::size_t idx = 0; auto* character : CCArrayExt<CCFontSprite>(this->m_textLabel->getChildren()))
 	{
 		if (float dist = std::fabs(character->getPositionX() - localPosX); dist < minDist)
 		{
@@ -1139,7 +1139,7 @@ std::size_t BetterTextInputNode::getClosestCharIdxToXPos(float posX)
 
 std::size_t BetterTextInputNode::getClosestCharIdxToXPos(float posX, CCLabelBMFont* targetLabel)
 {
-	if (this->m_placeholderLabel) return -2;
+	if (this->m_textLabel) return -2;
 
 	float minDist = std::numeric_limits<float>::max();
 	std::size_t closestIdx = -2;
